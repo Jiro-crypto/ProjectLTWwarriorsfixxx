@@ -7,15 +7,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0; /* nếu bạn muốn bo thì giữ lại */
+    border-radius: 25px; /* nếu bạn muốn bo thì giữ lại */
+
     background-image: url('../images_landingpage/bannernew.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover; /* hoặc contain nếu muốn giữ nguyên tỉ lệ */
+
     width: 100%; /* full chiều ngang màn hình */
-    height: auto;
-    margin-bottom: 40px;
+    max-width: 1170px;
+    margin: 0 auto 40px;
     aspect-ratio: 16/5; /*giữ tỉ lệ khung ảnh*/
+}
+
+@media (max-width: 768px) {
+    .Banner {
+        border-radius: 16px;
+        aspect-ratio: 16 / 9; /* tỉ lệ “dễ thở” hơn trên mobile, có thể giữ 16/5 nếu thích */
+    }
 }
 
 .Bo_Khung_San_Pham { /* Bao khung tổng cho phần danh sách sản phẩm */
