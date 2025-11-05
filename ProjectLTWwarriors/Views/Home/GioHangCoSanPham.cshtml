@@ -155,6 +155,7 @@
         </div>
     </div>
 
+    @*Cập nhật script giúp cho sản phẩm có thể chạy ổn hơn mượt mà web*@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -172,6 +173,23 @@
                 $(".tong-cong-tien").text(tongTien.toLocaleString('vi-VN') + "đ");
             }
 
+            //Hàm Cập nhật icon giỏ hàng trên header
+            function capNhatSoLuongGioHang() {
+                var tong = 0;
+                $(".so-luong-hien-tai").each(function () {
+                    var v = parseInt($(this).val(), 10);
+                    if (!isNaN(v)) tong += v;
+                });
+
+                var $badge = $("#cart-count");
+                if ($badge.length) {
+                    $badge.text(tong);
+                }
+            }
+
+            // Gọi 1 lần khi trang load để chắc chắn icon đúng
+            capNhatSoLuongGioHang();
+
             // Khi bấm nút "+"
             $(".nut-tang-so-luong").click(function () {
                 var nut = $(this);
@@ -182,6 +200,7 @@
                         var soLuongMoi = parseInt(input.val()) + 1;
                         input.val(soLuongMoi);
                         capNhatTongTien(); // Cập nhật tổng tiền
+                        capNhatSoLuongGioHang();   // cập nhật icon giỏ hàng
                     }
                 });
             });
@@ -205,6 +224,7 @@
 
                     // Cập nhật tổng tiền (giữ đúng hàm bạn đang dùng)
                     capNhatTongTien();
+                    capNhatSoLuongGioHang();  // cập nhật icon giỏ hàng
 
                     // Chuyển sang trang giỏ trống khi không còn item
                     // Ưu tiên dùng cờ server, nếu không có thì fallback đếm DOM

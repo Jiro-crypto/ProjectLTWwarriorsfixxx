@@ -15,7 +15,7 @@
     @Html.Partial("Header")
 
 
-    
+
     <main class="content-wrapper">
         @RenderBody()
     </main>
@@ -26,5 +26,45 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- Khi trang vừa load: lấy số lượng giỏ hàng hiện tại ---
+        fetch('/Home/GetCartCount')
+            .then(r => r.json())
+            .then(d => {
+                const el = document.getElementById('cart-count');
+                if (el) el.textContent = d.count;
+            });
+
+        // --- Khi người dùng bấm "Thêm vào giỏ hàng" ---
+        document.body.addEventListener('click', function(e) {
+            const btn = e.target.closest('[data-add-to-cart]');
+            if (!btn) return;
+
+            const id  = btn.getAttribute('data-masp');
+            const qty = btn.getAttribute('data-qty') || 1;
+
+            fetch('/Home/ThemVaoGio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                body: `maSP=${encodeURIComponent(id)}&soLuong=${encodeURIComponent(qty)}`
+            })
+            .then(r => r.json())
+            .then(d => {
+                if (d && d.success) {
+                    // Sau khi thêm thành công -> gọi lại API đếm giỏ
+                    return fetch('/Home/GetCartCount');
+                }
+            })
+            .then(r => r ? r.json() : null)
+            .then(d => {
+                const el = document.getElementById('cart-count');
+                if (el && d) el.textContent = d.count;
+            })
+            .catch(err => console.error(err));
+        });
+    });
+    </script>
 </body>
 </html>
