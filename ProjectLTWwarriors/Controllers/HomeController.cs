@@ -307,7 +307,16 @@ namespace ProjectLTWwarriors.Controllers
                 Session["GioHang"] = gioHang;
             }
 
-            return Json(new { success = true });
+            //return Json(new { success = true });
+
+            // Tính lại số lượng & tổng tiền để client cập nhật UI
+            int count = gioHang?.Sum(x => x.SoLuong) ?? 0;
+            decimal tong = gioHang?.Sum(x => (decimal)x.SanPham.Price * x.SoLuong) ?? 0;
+
+            // CỜ báo giỏ rỗng
+            bool empty = (gioHang == null || !gioHang.Any());
+
+            return Json(new { success = true, empty, count, tong });
         }
 
 
