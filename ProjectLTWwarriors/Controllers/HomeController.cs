@@ -423,5 +423,17 @@ namespace ProjectLTWwarriors.Controllers
             }
             return View(user);
         }
+
+
+        // Trả về số lượng sản phẩm trong giỏ hàng (cho JavaScript cập nhật header)
+        //Bấm nút “Thêm vào giỏ”, trang không reload, nên ViewBag (được render từ server) không cập nhật lại.
+        // => Cách để cập nhật trong lúc đang ở trang hiện tại là dùng AJAX (fetch) => gọi hàm JSON như GetCartCount
+        [HttpGet]
+        public JsonResult GetCartCount()
+        {
+            var gioHang = Session["GioHang"] as List<MatHangTrongGio> ?? new List<MatHangTrongGio>();
+            int count = gioHang.Sum(x => x.SoLuong);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
     }
 }   

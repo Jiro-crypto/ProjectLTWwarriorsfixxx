@@ -35,12 +35,31 @@
 
         
 
-        <div class="gio-hang">
-            <a href="/Home/XemGioHang">
-                <i class="fas fa-shopping-cart cart-icon"></i>
-                <span class="so-luong-gio">@ViewBag.SoLuongTrongGio</span>
-            </a>
-        </div>
+    <div class="gio-hang">
+        @*<a href="/Home/XemGioHang">
+            <i class="fas fa-shopping-cart cart-icon"></i>
+            <span class="so-luong-gio">@ViewBag.SoLuongTrongGio</span>
+        </a>*@
+
+        <a href="@Url.Action("XemGioHang","Home")" class="nav-link">
+            <i class="fas fa-shopping-cart cart-icon"></i> @*Giỏ hàng*@
+            <span id="cart-count" class="badge bg-danger">0</span>
+        </a>
+
+        <style>
+            .badge {
+                display: inline-block;
+                min-width: 20px;
+                padding: 2px 6px;
+                border-radius: 10px;
+                background: #dc3545;
+                color: #fff;
+                text-align: center;
+                font-size: 12px
+            }
+        </style>
+
+    </div>
 
 
 
