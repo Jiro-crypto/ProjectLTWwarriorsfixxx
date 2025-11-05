@@ -191,15 +191,29 @@
                 var nut = $(this);
                 var maSP = nut.data("masp");
                 $.post("/Home/GiamSoLuong", { maSP: maSP }, function (res) {
-                    if (res.success) {
-                        var input = nut.siblings(".so-luong-hien-tai");
-                        var soLuongMoi = parseInt(input.val()) - 1;
-                        if (soLuongMoi <= 0) {
-                            nut.closest(".san-pham-trong-gio").remove();
-                        } else {
-                            input.val(soLuongMoi);
-                        }
-                        capNhatTongTien(); // Cập nhật tổng tiền
+                    if (!res || !res.success) return;
+
+                    var input = nut.siblings(".so-luong-hien-tai");
+                    var soLuongMoi = parseInt(input.val(), 10) - 1;
+
+                    if (soLuongMoi <= 0) {
+                        // 1 -> bấm "-" => xóa dòng
+                        nut.closest(".san-pham-trong-gio").remove();
+                    } else {
+                        input.val(soLuongMoi); // 3 -> 2 ...
+                    }
+
+                    // Cập nhật tổng tiền (giữ đúng hàm bạn đang dùng)
+                    capNhatTongTien();
+
+                    // Chuyển sang trang giỏ trống khi không còn item
+                    // Ưu tiên dùng cờ server, nếu không có thì fallback đếm DOM
+                    var hetHangTheoServer = (res.empty === true);
+                    var hetHangTheoDOM = ($(".san-pham-trong-gio").length === 0);
+
+                    if (hetHangTheoServer || hetHangTheoDOM) {
+                        window.location.href = "/Home/XemGioHang";
+                        return;
                     }
                 });
             });

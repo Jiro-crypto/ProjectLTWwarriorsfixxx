@@ -27,17 +27,27 @@
         <h1 class="ten-san-pham">@Model.Name</h1>
         <p class="gia-san-pham">@string.Format("{0:N0}đ", Model.Price)</p>
 
-        <div class="khu-vuc-tuy-chon">
-            <label class="nhan-tuy-chon">Dung lượng</label>
-            <div class="cac-nut-tuy-chon">
-                @*<button class="nut-tuy-chon dang-chon">@Model.Storage</button>*@
-                @* Dùng vòng lặp để hiển thị tất cả các tùy chọn dung lượng *@
-                @foreach (var dungLuong in Model.Storage)
-                {
-                    <button class="nut-tuy-chon">@dungLuong</button>
-                }
+        @{
+            // Lấy danh sách dung lượng, phòng trường hợp Model.Storage bị null
+            var storageOptions = (Model.Storage ?? new List<string>())
+
+            // BỎ các phần tử bằng "X" (không phân biệt hoa thường, có trim khoảng trắng)
+                .Where(s => !string.Equals(s, "X", StringComparison.OrdinalIgnoreCase)) // bỏ X
+                .ToList();
+        }
+
+        @if (storageOptions.Any()) //kiểm tra danh sách có phần tử nào không (nếu có là có dung lượng || nếu không là X => null bỏ qua khối này)
+        {
+            <div class="khu-vuc-tuy-chon">
+                <label class="nhan-tuy-chon">Dung lượng</label>
+                <div class="cac-nut-tuy-chon">
+                    @foreach (var dungLuong in storageOptions)
+                    {
+                        <button class="nut-tuy-chon">@dungLuong</button>
+                    }
+                </div>
             </div>
-        </div>
+        }
 
         <div class="khu-vuc-tuy-chon">
             <label class="nhan-tuy-chon">Màu</label>
