@@ -396,13 +396,21 @@ namespace ProjectLTWwarriors.Controllers
         }
 
 
-
-
         [HttpPost]
         public ActionResult SignIn(string email, string password)
         {
-            var users = Session["Users"] as List<User> ?? new List<User>();
-            var user = users.FirstOrDefault(u => u.Username == email && u.Password == password);
+            // LẤY ĐÚNG DANH SÁCH ĐÃ ĐĂNG KÝ DỰA THEO ACCOUNTCONTROLER
+            var dsNguoiDung = Session["NguoiDung"] as List<InfoUser> ?? new List<InfoUser>();
+
+            // DEBUG tạm xem session có ai không
+            System.Diagnostics.Debug.WriteLine($"[LOGIN] NguoiDung.Count = {dsNguoiDung.Count}");
+
+            var normEmail = (email ?? "").Trim().ToLowerInvariant();
+            var user = dsNguoiDung.FirstOrDefault(u =>
+                u.Email != null &&
+                u.Email.Trim().ToLowerInvariant() == normEmail &&
+                u.MatKhau == password
+            );
 
             if (user == null)
             {
@@ -410,9 +418,11 @@ namespace ProjectLTWwarriors.Controllers
                 return View();
             }
 
+            // nếu bạn dùng CurrentUser thì có thể ánh xạ sang kiểu bạn đang dùng
             Session["CurrentUser"] = user;
             return RedirectToAction("WelcomeBack");
         }
+
 
         public new ActionResult Profile()
         {
