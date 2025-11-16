@@ -23,7 +23,7 @@
 @media (max-width: 768px) {
     .Banner {
         border-radius: 16px;
-        aspect-ratio: 16 / 9; /* tỉ lệ “dễ thở” hơn trên mobile, có thể giữ 16/5 nếu thích */
+        aspect-ratio: 19 / 7; /* tỉ lệ “dễ thở” hơn trên mobile, có thể giữ 16/5 nếu thích */
     }
 }
 
